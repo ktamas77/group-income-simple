@@ -10,6 +10,8 @@ import TestEventLog from './views/EventLog.vue'
 import Invite from './views/Invite.vue'
 import PayGroup from './views/PayGroup.vue'
 import NavBar from './views/NavBar.vue'
+import SendPayment from './views/SendPayment.vue'
+import ReceivePayment from './views/ReceivePayment.vue'
 import { wrap, lazyLoadVue } from './js/utils'
 import store from './js/state'
 import './js/transitions'
@@ -125,6 +127,20 @@ var router = new Router({
         title: 'Invite Group Members'
       },
       beforeEnter: createEnterGuards(store, loginGuard, inviteGuard)
+    },
+    {
+      path: '/send-payment',
+      component: SendPayment,
+      meta: {
+        title: 'Send Payment'
+      }
+    },
+    {
+      path: '/receive-payment',
+      component: ReceivePayment,
+      meta: {
+        title: 'Receive Payment'
+      }
     },
     {
       path: '*',
