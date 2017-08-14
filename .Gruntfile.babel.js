@@ -139,7 +139,7 @@ module.exports = (grunt) => {
               res.end(fs.readFileSync(f))
             } else if (S(f).startsWith('dist/simple/') && !/\.[a-z][a-z0-9]+(\?[^/]*)?$/.test(f)) {
               // if we are a vue-router route, send main index file
-              console.log(`Req: ${req.url}, sending index.html for: ${f}`)
+              /// console.log(`Req: ${req.url}, sending index.html for: ${f}`)
               res.end(fs.readFileSync('dist/simple/index.html'))
             } else {
               next() // otherwise send the resource itself, whatever it is

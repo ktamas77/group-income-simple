@@ -4,12 +4,12 @@ import * as db from './database'
 import Hapi from 'hapi'
 import GiAuth from './auth'
 import {HashableEntry} from '../shared/events'
-import {bold} from 'chalk'
+/// import {bold} from 'chalk'
 
 export var hapi = new Hapi.Server({
   // TODO: improve logging and base it on process.env.NODE_ENV
   //       https://github.com/okTurtles/group-income-simple/issues/32
-  debug: { request: ['error'], log: ['error'] }
+  /// debug: { request: ['error'], log: ['error'] }
 })
 
 hapi.connection({
@@ -21,14 +21,14 @@ hapi.connection({
 hapi.decorate('server', 'handleEvent', async function (
   contractId: string, entry: HashableEntry
 ) {
-  console.log(bold('[server] handleEvent:'), entry)
+  /// console.log(bold('[server] handleEvent:'), entry)
   if (!entry.toObject().parentHash) {
     await db.createLog(contractId, entry)
   } else {
     await db.appendLogEntry(contractId, entry)
   }
   var response = entry.toResponse(contractId)
-  console.log(bold.blue(`broadcasting to room ${contractId}:`), response)
+  /// console.log(bold.blue(`broadcasting to room ${contractId}:`), response)
   hapi.primus.room(contractId).write(response)
 })
 
@@ -37,6 +37,6 @@ export const loaded = hapi.register(GiAuth).then(() => {
   require('./routes')(hapi)
   require('./pubsub')(hapi)
   return hapi.start().then(() => {
-    console.log('API server running at:', hapi.info.uri)
+    /// console.log('API server running at:', hapi.info.uri)
   })
 })

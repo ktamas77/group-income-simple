@@ -5,7 +5,7 @@
 // primus events: https://github.com/primus/primus#events
 // https://github.com/primus/primus-emit (better than primus-emitter)
 
-import {bold} from 'chalk'
+/// import {bold} from 'chalk'
 import {RESPONSE_TYPE} from '../shared/constants'
 import {makeResponse as reply, setupPrimus} from '../shared/functions'
 
@@ -24,31 +24,31 @@ module.exports = function (hapi: Object) {
   // make it possible to access primus via: hapi.primus
   hapi.decorate('server', 'primus', primus)
 
-  primus.on('roomserror', function (error, spark) {
-    console.log(bold.red('Rooms error from ' + spark.id), error)
-  })
-  primus.on('joinroom', function (room, spark) {
-    console.log(bold.yellow(spark.id + ' joined ' + room))
-  })
+  /// primus.on('roomserror', function (error, spark) {
+    /// console.log(bold.red('Rooms error from ' + spark.id), error)
+  /// })
+  /// primus.on('joinroom', function (room, spark) {
+    /// console.log(bold.yellow(spark.id + ' joined ' + room))
+  /// })
 
   primus.on('connection', function (spark) {
     // spark is the new connection. https://github.com/primus/primus#sparkheaders
-    const {id, address} = spark
+    const {id} = spark /// id, address
     // console.log('connection has the following headers', headers)
-    console.log(bold(`[pubsub] ${id} connected from:`), address)
+    /// console.log(bold(`[pubsub] ${id} connected from:`), address)
 
     // https://github.com/swissmanu/primus-responder
     spark.on('request', async function (req, done) {
       try {
         var {type, data: {contractId}} = req
         var success = reply(SUCCESS, {type, id})
-        console.log(bold(`[pubsub] REQUEST '${type}' from '${id}'`), req)
+        /// console.log(bold(`[pubsub] REQUEST '${type}' from '${id}'`), req)
         switch (type) {
           case SUB:
             if (spark.rooms().indexOf(contractId) === -1) {
               spark.join(contractId, function () {
                 spark.on('leaveallrooms', (rooms) => {
-                  console.log(bold.yellow(`[pubsub] ${id} leaveallrooms`))
+                  /// console.log(bold.yellow(`[pubsub] ${id} leaveallrooms`))
                   // this gets called on spark.leaveAll and 'disconnection'
                   rooms.forEach(contractId => {
                     primus.room(contractId).write(reply(UNSUB, {contractId, id}))
@@ -58,7 +58,7 @@ module.exports = function (hapi: Object) {
                 done(success)
               })
             } else {
-              console.log(`[pubsub] ${id} already subscribed to: ${contractId}`)
+              /// console.log(`[pubsub] ${id} already subscribed to: ${contractId}`)
               done(success)
             }
             break
@@ -70,7 +70,7 @@ module.exports = function (hapi: Object) {
             spark.room(contractId).except(id).write(req)
             break
           default:
-            console.error(bold.red(`[pubsub] client ${id} didn't give us a valid type!`), req)
+            /// console.error(bold.red(`[pubsub] client ${id} didn't give us a valid type!`), req)
             spark.leaveAll()
             done(reply(ERROR, `invalid type: ${type}`))
             spark.end()
@@ -81,13 +81,13 @@ module.exports = function (hapi: Object) {
       }
     })
 
-    spark.on('data', function (data) {
-      console.log(bold.red('[pubsub] received UNHANDLED DATA from client:', data))
-    })
+    /// spark.on('data', function (data) {
+      /// console.log(bold.red('[pubsub] received UNHANDLED DATA from client:', data))
+    /// })
   })
 
-  primus.on('disconnection', function (spark) {
+  /// primus.on('disconnection', function (spark) {
     // the spark that disconnected
-    console.log(bold.yellow(`[pubsub] ${spark.id} disconnection`))
-  })
+    /// console.log(bold.yellow(`[pubsub] ${spark.id} disconnection`))
+  /// })
 }

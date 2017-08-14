@@ -231,7 +231,7 @@ export default {
         })
         await backend.publishLogEntry(hash, entry)
       } catch (error) {
-        console.error(error)
+        // console.error(error)
         this.errorMsg = L('Failed to Create Group')
       }
     }

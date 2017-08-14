@@ -90,6 +90,7 @@ declare module 'xvfb-maybe' { declare module.exports: any }
 declare module 'blakejs' { declare module.exports: any }
 declare module 'protobufjs/light' { declare module.exports: any }
 declare module 'node-fetch' { declare module.exports: any }
+declare module 'winston' { declare module.exports: any }
 
 // .vue and .ejs files
 declare module './views/NavBar.vue' { declare module.exports: Object }

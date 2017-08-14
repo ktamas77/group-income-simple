@@ -90,7 +90,7 @@ class Log extends Model {
     return this.query(txn).context({onBuild: builder => builder.table(name)})
   }
   $beforeInsert () {
-    console.log(`[Log] ${Log.tableName} INSERT:`, this.toJSON())
+    /// console.log(`[Log] ${Log.tableName} INSERT:`, this.toJSON())
   }
 }
 
@@ -114,7 +114,7 @@ export async function createLog (
     table.text('hash').notNullable().index()
   })
   await Log.table(contractId).insert({...entry.toObject(), hash: contractId})
-  console.log('createLog():', contractId, entry)
+  /// console.log('createLog():', contractId, entry)
   return contractId
 }
 
@@ -134,7 +134,7 @@ export async function appendLogEntry (
     await HashToData.query(trx).insert({hash, value: entry.toJSON()})
     await Log.table(contractId, trx).insert({...entry.toObject(), hash})
   })
-  console.log('appendLogEntry():', entry, hash)
+  /// console.log('appendLogEntry():', entry, hash)
   return hash
 }
 
@@ -150,7 +150,7 @@ export async function lastEntry (contractId: string) {
 // => request.on('close', stream.end.bind(stream))
 // NOTE: On Hapi.js the event is 'disconnect'.
 export function streamEntriesSince (contractId: string, hash: string) {
-  console.log('streamEntriesSince():', contractId, hash)
+  /// console.log('streamEntriesSince():', contractId, hash)
   var isBeginning = true
   return knex(contractId).select('*')
   .where(
@@ -217,19 +217,19 @@ if (testDatabaseJs && testDatabaseJs.indexOf('babel-node') !== -1) {
       await loaded
       var entry = new HashableGroup({hello: 'world!', pubkey: 'foobarbaz'})
       var contractId = entry.toHash()
-      console.log('creating group:', contractId)
+      /// console.log('creating group:', contractId)
       await createLog(contractId, entry)
 
       entry = new HashableGroup({crazy: 'lady'}, contractId)
-      var res = await appendLogEntry(contractId, entry)
-      console.log(`added log entry ${entry.toJSON()} with result:`, res)
-      res = await lastEntry(contractId)
-      console.log(`last log entry for ${Log.tableName}:`, res)
+      await appendLogEntry(contractId, entry) // res =
+      /// console.log(`added log entry ${entry.toJSON()} with result:`, res)
+      await lastEntry(contractId) // res =
+      /// console.log(`last log entry for ${Log.tableName}:`, res)
 
       knex.destroy()
       process.exit(0)
     } catch (err) {
-      console.log('exception:', err.message, err.stack)
+      /// console.log('exception:', err.message, err.stack)
       knex.destroy()
       process.exit(1)
     }

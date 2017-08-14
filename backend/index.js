@@ -6,9 +6,9 @@ import * as server from './server'
 //       http://jamesknelson.com/are-es6-promises-swallowing-your-errors/
 global.Promise = require('bluebird')
 // TODO: improve logging: https://github.com/okTurtles/group-income-simple/issues/32
-global.logger = function (err) {
-  console.error(err)
-  console.error(err.stack)
+global.logger = function () { /// err
+  /// console.error(err)
+  /// console.error(err.stack)
 }
 
 module.exports = Promise.all([db.loaded, server.loaded]).then(() => {

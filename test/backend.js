@@ -28,8 +28,8 @@ const {API_URL: API} = process.env
 const {SUCCESS} = RESPONSE_TYPE
 
 chalk.enabled = true // for some reason it's not detecting that terminal supports colors
-const {bold} = chalk
-console.log(bold('COLORS SUPPORTED?'), chalk.supportsColor)
+/// const {bold} = chalk
+/// console.log(bold('COLORS SUPPORTED?'), chalk.supportsColor)
 
 var buf2b64 = buf => Buffer.from(buf).toString('base64')
 var personas = _.times(3, () => nacl.sign.keyPair()).map(x => _.mapValues(x, buf2b64))
@@ -64,7 +64,7 @@ describe('Full walkthrough', function () {
           open: () => resolve(primus),
           error: err => reject(err),
           data: msg => {
-            console.log(bold(`[test] ONDATA msg:`), msg)
+            /// console.log(bold(`[test] ONDATA msg:`), msg)
             events.$emit(msg.data.hash, msg.data)
           }
         }
@@ -110,7 +110,7 @@ describe('Full walkthrough', function () {
     } else if (contractId instanceof HashableEntry) {
       contractId = contractId.toHash()
     }
-    console.log(bold.yellow('sending entry with hash:'), entry.toHash())
+    /// console.log(bold.yellow('sending entry with hash:'), entry.toHash())
     var res = await request.post(`${API}/event/${contractId}`)
       .set('Authorization', `gi ${signatures[0]}`)
       .send({hash: entry.toHash(), entry: entry.toObject()})
@@ -200,7 +200,7 @@ describe('Full walkthrough', function () {
       res = await fetch(`${API}/events/${bobsContractId}/${bobsContractId}`)
       should(res.body).be.an.instanceof(stream.Transform)
       var events = await res.json()
-      console.log(bold.red('EVENTS:'), events)
+      /// console.log(bold.red('EVENTS:'), events)
       // NOTE: even though we could avoid creating instances out of these events,
       //       we do it anyways even in these tests just to remind the reader
       //       that .fromObject must be called on the input data, so that the
@@ -215,7 +215,7 @@ describe('Full walkthrough', function () {
         let type = action.constructor.name
         contract.constructor.vuex.mutations[type](state, {data: action.data, hash: action.hash})
       })
-      console.log(bold.red('FINAL STATE:'), state)
+      /// console.log(bold.red('FINAL STATE:'), state)
       // 3. get bob's mailbox contractId from his identity contract attributes
       should(state.attributes.mailbox).equal(bob.mailbox.toHash())
       // 4. fetch the latest hash for bob's mailbox.
@@ -228,7 +228,7 @@ describe('Full walkthrough', function () {
       var mailbox = users.bob.mailbox
       var invite = new Events.HashableMailboxPostMessage({messageType: Events.HashableMailboxPostMessage.TypeInvite, message: groups.group1.toHash()}, latestHash(mailbox))
       events.$once(invite.toHash(), ({contractId, hash, entry}) => {
-        console.log('Bob successfully got invite!', entry)
+        /// console.log('Bob successfully got invite!', entry)
         should(entry.data.message).equal(groups.group1.toHash())
         done()
       })
