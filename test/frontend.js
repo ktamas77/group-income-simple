@@ -427,8 +427,12 @@ describe('Frontend', function () {
     it('Should Receive Message and Invite', async function () {
       this.timeout(10000)
       await n
-        .goto(page('mailbox'))
-        .wait(elT('inbox'))
+        // .goto(page('mailbox'))
+        // TODO: navigation gets redirected on login guard but nav click doesn't?
+        // we might have logged in state problems
+        .wait(elT('mailboxLink'))
+        .click(elT('mailboxLink'))
+        .wait(elT('composeLink'))
         .click(elT('composeLink'))
         .wait(elT('addRecipient'))
         .insert(elT('addRecipient'), username)
