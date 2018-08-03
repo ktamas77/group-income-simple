@@ -247,7 +247,7 @@ const actions = {
   ) {
     debouncedSave.cancel()
     await dispatch('saveSettings', state)
-    await db.clearCurrentUser()
+    await db.clear()
     for (let contractID of Object.keys(state.contracts)) {
       mutations.removeContract(state, contractID)
     }

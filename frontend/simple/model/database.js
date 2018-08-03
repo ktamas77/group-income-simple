@@ -79,3 +79,6 @@ export function clearCurrentUser (): Promise<Object> {
 export function loadCurrentUser (): Promise<string> {
   return appSettings.getItem('currentUser')
 }
+export function clear (user: string): Promise<Object> {
+  return appSettings.clear()
+}

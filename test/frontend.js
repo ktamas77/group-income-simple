@@ -444,21 +444,21 @@ describe('Frontend', function () {
         .click(elT('mailboxLink'))
 
       const alert = await n.exists(elT('alertNotification'))
-      should(alert).equal(true)
+      should(alert).equal(true, 'notification')
       const unread = await n.evaluate(
         (el) => document.querySelector(el) && +document.querySelector(el).innerText,
         elT('inboxUnread')
       )
-      should(unread).equal(2)
+      should(unread).equal(2, 'messageCount')
       const hasInvite = await n.exists(elT('inviteMessage'))
-      should(hasInvite).equal(true)
+      should(hasInvite).equal(true, 'invite message')
       const hasMessage = await n.exists(elT('inboxMessage'))
-      should(hasMessage).equal(true)
+      should(hasMessage).equal(true, 'inbox message')
       const accept = await n
         .click(elT('inviteMessage'))
         .wait(elT('acceptLink'))
         .exists(elT('acceptLink'))
-      should(accept).equal(true)
+      should(accept).equal(true, 'accept link')
     })
     it('Should Accept Invite', async function () {
       this.timeout(30000)
